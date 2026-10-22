@@ -8,5 +8,8 @@ frontend/playwright-report/
 frontend/*.tsbuildinfo
 *.log
 .env
+.env.*
+!.env.example
+.vercel/
 .DS_Store
 .ruff_cache/

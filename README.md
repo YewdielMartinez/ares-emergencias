@@ -4,6 +4,10 @@ Proyecto académico de Inteligencia Artificial que integra fundamentos de IA, ag
 
 ![Centro de operaciones ARES](docs/ares-dashboard.png)
 
+## Publicar en internet
+
+El frontend se publica en **Vercel** desde `frontend/` y la API en **Railway** desde la raíz con el `Dockerfile`. Consulta la [guía de despliegue](docs/DESPLIEGUE.md) para conectar ambos dominios y verificar la publicación.
+
 ## Iniciar en Windows
 
 Requisitos: **Python 3.11+** y, para instalar o recompilar el frontend, **Node.js 22.12+** (también funciona 20.19+). La primera instalación requiere internet.

@@ -1,0 +1,7 @@
+**
+!Dockerfile
+!requirements-lock.txt
+!backend/
+!backend/**
+**/__pycache__/
+**/*.py[cod]

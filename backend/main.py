@@ -1,5 +1,6 @@
 """Composition root: ensambla dependencias, API y frontend estático."""
 
+import os
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -22,7 +23,13 @@ def create_app(simulation: Simulation | None = None) -> FastAPI:
     )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+        allow_origins=[
+            origin.strip().rstrip("/")
+            for origin in os.getenv(
+                "ARES_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+            ).split(",")
+            if origin.strip()
+        ],
         allow_methods=["GET", "POST"],
         allow_headers=["Content-Type"],
     )

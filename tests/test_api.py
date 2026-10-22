@@ -1,4 +1,6 @@
+import os
 import unittest
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
@@ -18,6 +20,49 @@ class ApiTests(unittest.TestCase):
         other = TestClient(create_app())
         self.client.post("/api/step", json={"steps": 3})
         self.assertEqual(other.get("/api/state").json()["tick"], 0)
+
+    def test_configured_frontend_can_read_and_change_state(self):
+        origin = "https://ares-example.vercel.app"
+        with patch.dict(os.environ, {"ARES_CORS_ORIGINS": f" {origin}/,https://demo.example "}):
+            client = TestClient(create_app())
+        response = client.options(
+            "/api/step",
+            headers={
+                "Origin": origin,
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "content-type",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers["access-control-allow-origin"], origin)
+        state = client.get("/api/state", headers={"Origin": origin})
+        self.assertEqual(state.headers["access-control-allow-origin"], origin)
+        stepped = client.post("/api/step", json={"steps": 1}, headers={"Origin": origin})
+        self.assertEqual(stepped.headers["access-control-allow-origin"], origin)
+        self.assertEqual(stepped.json()["tick"], state.json()["tick"] + 1)
+        self.assertEqual(
+            client.get("/api/health", headers={"Origin": "https://demo.example"})
+            .headers["access-control-allow-origin"],
+            "https://demo.example",
+        )
+        for other in ["https://unrelated.vercel.app", "http://localhost:5173"]:
+            with self.subTest(origin=other):
+                blocked = client.options(
+                    "/api/step",
+                    headers={"Origin": other, "Access-Control-Request-Method": "POST"},
+                )
+                self.assertEqual(blocked.status_code, 400)
+                self.assertNotIn("access-control-allow-origin", blocked.headers)
+
+    def test_local_frontend_origins_work_without_deployment_configuration(self):
+        with patch.dict(os.environ):
+            os.environ.pop("ARES_CORS_ORIGINS", None)
+            client = TestClient(create_app())
+        for origin in ["http://localhost:5173", "http://127.0.0.1:5173"]:
+            with self.subTest(origin=origin):
+                response = client.get("/api/state", headers={"Origin": origin})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.headers["access-control-allow-origin"], origin)
 
     def test_step_reset_and_algorithm(self):
         self.assertEqual(self.client.post("/api/step", json={"steps": 2}).json()["tick"], 2)
