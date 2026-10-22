@@ -1,15 +1,15 @@
-# Publicar ARES con Vercel y Railway
+# Publicar ARES con Vercel y Render
 
-React se aloja en Vercel y consume la API Python de Railway mediante HTTPS. Los algoritmos y las decisiones del simulador siguen ejecutándose en Python.
+React se aloja en Vercel y consume la API Python de Render mediante HTTPS. Los algoritmos y las decisiones del simulador siguen ejecutándose en Python.
 
-## 1. Publicar la API en Railway
+## 1. Publicar la API en Render
 
 1. Sube estos cambios al repositorio `YewdielMartinez/ares-emergencias`.
-2. Crea un proyecto en Railway con **Deploy from GitHub repo** y selecciona el repositorio y la rama que contiene los cambios. Como el repositorio es privado, autoriza su acceso desde Railway.
-3. Conserva **Root Directory** en la raíz del repositorio. Railway detecta el `Dockerfile`, instala `requirements-lock.txt` y ejecuta `backend.main:app` en `0.0.0.0` usando su variable `PORT`. Deja vacíos los comandos personalizados de compilación y arranque.
-4. Configura **Healthcheck Path** como `/api/health` y conserva **una sola réplica**.
-5. En **Networking**, genera un dominio público. Usa el puerto asignado mediante `PORT` al configurar el dominio.
-6. Abre `https://TU-API.up.railway.app/api/health`: debe responder con `status: "ok"`. La documentación estará en `https://TU-API.up.railway.app/docs`.
+2. Crea un **Web Service** en Render y selecciona el repositorio y la rama que contiene los cambios. Como el repositorio es privado, autoriza su acceso desde la integración GitHub de Render.
+3. Selecciona el runtime **Docker** y conserva **Root Directory** en la raíz del repositorio. El `Dockerfile` instala `requirements-lock.txt` y ejecuta `backend.main:app` en `0.0.0.0` usando la variable `PORT` de Render. Deja vacíos los comandos personalizados de arranque.
+4. Elige el plan **Free**, configura **Health Check Path** como `/api/health` y conserva **una sola instancia**.
+5. Agrega `ARES_CORS_ORIGINS` con el dominio de producción de Vercel, como se indica en el paso 3 de esta guía, e inicia el despliegue.
+6. Espera a que Render marque el despliegue como **Live** y abre `https://TU-API.onrender.com/api/health`: debe responder con `status: "ok"`. La documentación estará en `https://TU-API.onrender.com/docs`.
 
 La imagen contiene únicamente el backend y sus dependencias. El frontend se compila por separado en Vercel.
 
@@ -20,10 +20,10 @@ La imagen contiene únicamente el backend y sus dependencias. El frontend se com
 3. Agrega esta variable para **Production** antes de desplegar:
 
    ```text
-   VITE_API_URL=https://TU-API.up.railway.app
+   VITE_API_URL=https://TU-API.onrender.com
    ```
 
-   Usa el origen HTTPS real de Railway, sin `/api` ni otras rutas. Si usas previews, configura también la variable en **Preview**.
+   Usa el origen HTTPS real de Render, sin `/api` ni otras rutas. Si usas previews, configura también la variable en **Preview**.
 
 4. Despliega y copia el dominio de producción del frontend, por ejemplo `https://TU-FRONTEND.vercel.app`.
 
@@ -31,7 +31,7 @@ La imagen contiene únicamente el backend y sus dependencias. El frontend se com
 
 ## 3. Permitir el dominio del frontend
 
-En las variables del servicio de Railway agrega:
+En las variables del servicio de Render agrega:
 
 ```text
 ARES_CORS_ORIGINS=https://TU-FRONTEND.vercel.app
@@ -47,18 +47,18 @@ Cada origen contiene solo protocolo y dominio, sin rutas. Agrega el dominio que 
 
 ## 4. Comprobar la publicación
 
-- `/api/health` de Railway devuelve `status: "ok"` y `/docs` muestra la API.
+- `/api/health` de Render devuelve `status: "ok"` y `/docs` muestra la API.
 - El frontend de Vercel muestra **Motor Python conectado**.
 - **Un paso** incrementa el tick y **Nueva emergencia** registra un incidente.
-- En la pestaña Network del navegador, las llamadas a `/api/state` y `/api/step` van al dominio de Railway y responden correctamente.
+- En la pestaña Network del navegador, las llamadas a `/api/state` y `/api/step` van al dominio de Render y responden correctamente.
 
-Si aparece un error de CORS, compara el origen del navegador con `ARES_CORS_ORIGINS`. Si la petición va a Vercel en lugar de Railway, revisa `VITE_API_URL` y recompila el frontend.
+Si aparece un error de CORS, compara el origen del navegador con `ARES_CORS_ORIGINS`. Si la petición va a Vercel en lugar de Render, revisa `VITE_API_URL` y recompila el frontend.
 
 ## Desarrollo local y estado de la simulación
 
-Sin `VITE_API_URL`, el frontend conserva las peticiones a `/api` del mismo origen: siguen funcionando `start.ps1` y el proxy de Vite. Sin `ARES_CORS_ORIGINS`, la API permite los dos orígenes locales de Vite en el puerto 5173. Los archivos `.env.example` documentan los valores; el backend recibe variables del proceso o del panel de Railway.
+Sin `VITE_API_URL`, el frontend conserva las peticiones a `/api` del mismo origen: siguen funcionando `start.ps1` y el proxy de Vite. Sin `ARES_CORS_ORIGINS`, la API permite los dos orígenes locales de Vite en el puerto 5173. Los archivos `.env.example` documentan los valores; el backend recibe variables del proceso o del panel de Render.
 
-La simulación mantiene un escenario compartido en memoria. Todos los visitantes modifican el mismo escenario y este se reinicia cuando Railway reinicia o despliega la API. Mantén un único proceso y una única réplica para evitar escenarios distintos según la petición; el `Dockerfile` ya fija `--workers 1`.
+La simulación mantiene un escenario compartido en memoria. Todos los visitantes modifican el mismo escenario y este se reinicia cuando Render reinicia o despliega la API. Mantén un único proceso y una única instancia para evitar escenarios distintos según la petición; el `Dockerfile` ya fija `--workers 1`. El plan Free suspende la instancia tras un periodo sin tráfico, por lo que la primera petición puede tardar en responder.
 
 ## Verificar la imagen localmente
 
@@ -79,7 +79,8 @@ npm run dev
 
 ## Referencias
 
-- [Railway: despliegue con Dockerfile](https://docs.railway.com/builds/dockerfiles).
-- [Railway: comprobación de salud](https://docs.railway.com/deployments/healthchecks).
+- [Render: despliegue con Dockerfile](https://render.com/docs/docker).
+- [Render: comprobación de salud](https://render.com/docs/health-checks).
+- [Render: plan Free](https://render.com/docs/free).
 - [Vercel: Vite](https://vercel.com/docs/frameworks/frontend/vite).
 - [Vite: variables de entorno](https://vite.dev/guide/env-and-mode).

@@ -12,5 +12,5 @@ COPY backend ./backend
 USER ares
 EXPOSE 8000
 
-# Railway proporciona PORT. Un proceso conserva el escenario compartido en memoria.
+# La plataforma proporciona PORT. Un proceso conserva el escenario compartido en memoria.
 CMD ["sh", "-c", "exec python -m uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"]
