@@ -2,6 +2,17 @@
 
 React se aloja en Vercel y consume la API Python de Render mediante HTTPS. Los algoritmos y las decisiones del simulador siguen ejecutándose en Python.
 
+## Despliegue publicado
+
+- Frontend: <https://ares-emergencias.vercel.app>.
+- API: <https://ares-emergencias-api.onrender.com>.
+- Documentación de la API: <https://ares-emergencias-api.onrender.com/docs>.
+- Comprobación de salud: <https://ares-emergencias-api.onrender.com/api/health>.
+
+En Vercel, `VITE_API_URL` apunta a `https://ares-emergencias-api.onrender.com`. En Render, `ARES_CORS_ORIGINS` permite `https://ares-emergencias.vercel.app` y el alias anterior `https://ares-emergencias-yewdiel-martinezs-projects.vercel.app`, que también dirige al frontend actualizado.
+
+Se verificaron en el despliegue público la conexión con Python, CORS, el avance de un tick y el registro de una emergencia. El escenario inicial se restauró después de la prueba. La API usa el plan Free de Render y un único proceso.
+
 ## 1. Publicar la API en Render
 
 1. Sube estos cambios al repositorio `YewdielMartinez/ares-emergencias`.
