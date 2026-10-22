@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { MK_THEME_HEAD_SCRIPT } from '@yewdiel21/motion-kit/theme';
+import { themeHeadScript } from '@yewdiel21/motion-kit/theme';
 import { MK_HEAD_SCRIPT } from '@yewdiel21/motion-kit';
 
 export default defineConfig({
@@ -10,7 +10,11 @@ export default defineConfig({
       name: 'motion-kit-theme',
       transformIndexHtml() {
         return [
-          { tag: 'script', children: MK_THEME_HEAD_SCRIPT, injectTo: 'head-prepend' },
+          {
+            tag: 'script',
+            children: themeHeadScript({ default: 'oled', mode: 'dark' }),
+            injectTo: 'head-prepend',
+          },
           { tag: 'script', children: MK_HEAD_SCRIPT, injectTo: 'head-prepend' },
         ];
       },

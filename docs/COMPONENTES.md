@@ -4,12 +4,12 @@ La interfaz usa los componentes y CSS originales de `@yewdiel21/motion-kit` 0.9.
 
 | Componente o control del kit | Uso real | Archivo principal |
 |---|---|---|
-| `.mk-shell`, `Nav` | Armazón de la aplicación, página activa, siete estilos y barra móvil | `frontend/src/App.tsx` |
+| `.mk-shell`, `Nav` | Armazón de la aplicación, página activa, Dock fijo y barra móvil nativa | `frontend/src/App.tsx` |
 | `Menu.*` | Emergencia a comparar, escenarios, velocidad, planificador y opciones de exportación/reinicio | `components/KitControls.tsx`, `pages/Algorithms.tsx`, `App.tsx` |
 | `Dialog.*` | Emergencias, reinicio y apariencia; encabezado, cuerpo, pie y foco nativo | `components/IncidentForm.tsx`, `ScenarioDialog.tsx`, `AppearanceDialog.tsx` |
 | `Steps`, `Steps.Step`, `Steps.Counter` | Flujo de tres etapas con regreso, validación y revisión antes de enviar | `components/IncidentForm.tsx` |
 | `ThemePicker` | Seis paletas originales, sin valores de color duplicados | `components/AppearanceDialog.tsx` |
-| `ThemeProvider`, `useTheme` | Tema, modo claro/oscuro/sistema y persistencia | `main.tsx`, `AppearanceDialog.tsx` |
+| `ThemeProvider`, `useTheme` | OLED oscuro por defecto, modo claro/oscuro/sistema y persistencia | `main.tsx`, `AppearanceDialog.tsx` |
 | `useTabs`, `.mk-segmented` | Herramientas Explorar/Bloqueos/Ubicar y filtros Activas/Resueltas | `components/KitControls.tsx`, `pages/Operations.tsx` |
 | `.mk-field` | Descripción, prioridad y escenario de reinicio | Formularios |
 | `.mk-switch` | Visibilidad de rutas y nodos | `components/KitControls.tsx` |

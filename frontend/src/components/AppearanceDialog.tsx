@@ -1,15 +1,8 @@
 import { Dialog, ThemePicker, useTheme } from '@yewdiel21/motion-kit/react';
-import type { NavStyle } from '@yewdiel21/motion-kit/react';
 import { Palette, X } from 'lucide-react';
 import { SegmentedControl } from './KitControls';
 
-export default function AppearanceDialog({
-  navStyle,
-  onNavStyle,
-}: {
-  navStyle: NavStyle;
-  onNavStyle: (style: NavStyle) => void;
-}) {
+export default function AppearanceDialog() {
   const theme = useTheme();
   return (
     <Dialog.Root>
@@ -58,25 +51,6 @@ export default function AppearanceDialog({
                 ]}
               />
             </div>
-            <label className="mk-field">
-              <span className="mk-field__label">Estilo de navegación</span>
-              <select
-                aria-label="Estilo de navegación"
-                value={navStyle}
-                onChange={(event) => onNavStyle(event.target.value as NavStyle)}
-              >
-                <option value="guapa">Guapa · superficie y chips</option>
-                <option value="tasks">Tasks · riel de acciones</option>
-                <option value="bonita">Bonita · píldoras</option>
-                <option value="clasica">Clásica · barra lateral</option>
-                <option value="melon">Melon · superficie tonal</option>
-                <option value="dock">Dock · barra flotante</option>
-                <option value="tunnel">Tunnel · tipografía</option>
-              </select>
-              <span className="mk-field__hint">
-                Los siete estilos pertenecen al componente Nav del kit.
-              </span>
-            </label>
           </div>
         </Dialog.Body>
         <Dialog.Footer>

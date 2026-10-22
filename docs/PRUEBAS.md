@@ -44,7 +44,7 @@ npm run test:e2e
 | Menu de emergencia | Componente `dialog.mk-menu`, selección con Home/flecha/Enter, tabla de EM-002, retorno de foco y ausencia de select nativo |
 | Detalles progresivos | Métricas ocultas al inicio, apertura con teclado, datos actualizados tras un tick y explicación de los cuatro algoritmos |
 | Steps | Validación del primer campo, revisión final y preservación de valores al regresar |
-| ThemePicker y Nav | Seis paletas, selección de azul, estilo Tasks y persistencia tras recargar |
+| ThemePicker y Nav | OLED oscuro inicial, Dock fijo incluso con un estilo anterior guardado, seis paletas y persistencia de paleta y modo tras recargar |
 
 Todas las pruebas de navegador comprueban que no se produzcan errores JavaScript de página. El dashboard se capturó a 1440 × 1080; la captura completa puede ser más alta por el contenido vertical.
 

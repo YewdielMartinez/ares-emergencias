@@ -267,20 +267,28 @@ test('Steps validates input, preserves values when going back and shows a review
   expect((await (await request.get('/api/state')).json()).incidents).toHaveLength(4);
 });
 
-test('ThemePicker and the seven-style Nav use the kit runtime and persist settings', async ({
+test('Dock stays fixed and OLED defaults respect saved theme preferences', async ({
   page,
 }) => {
+  await expect(page.locator('html')).toHaveAttribute('data-mk-theme', 'oled');
+  await expect(page.locator('html')).toHaveAttribute('data-mk-mode', 'dark');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+  await expect(page.locator('nav.mk-nav')).toHaveClass(/mk-nav--dock/);
+  await page.evaluate(() => localStorage.setItem('ares-nav', 'tasks'));
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.reload();
+  await expect(page.locator('nav.mk-nav')).toHaveClass(/mk-nav--dock/);
   await page.getByRole('button', { name: 'Personalizar interfaz' }).click();
+  await expect(page.getByLabel('Estilo de navegación', { exact: true })).toHaveCount(0);
   await expect(page.locator('.mk-theme-picker .mk-swatch')).toHaveCount(6);
   await page.locator('.mk-swatch[data-mk-swatch="blue"]').click();
   await expect(page.locator('html')).toHaveAttribute('data-mk-theme', 'blue');
-  await page.getByLabel('Estilo de navegación', { exact: true }).selectOption('tasks');
-  await expect(page.locator('nav.mk-nav')).toHaveClass(/mk-nav--tasks/);
+  await page.getByRole('tab', { name: 'Claro', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-mk-mode', 'light');
   await page.screenshot({ path: path.resolve('../docs/ares-appearance.png'), fullPage: true });
   await page.getByRole('button', { name: 'Listo', exact: true }).click();
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-mk-theme', 'blue');
-  await expect(page.locator('nav.mk-nav')).toHaveClass(/mk-nav--tasks/);
+  await expect(page.locator('html')).toHaveAttribute('data-mk-mode', 'light');
+  await expect(page.locator('nav.mk-nav')).toHaveClass(/mk-nav--dock/);
 });

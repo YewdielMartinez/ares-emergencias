@@ -111,7 +111,7 @@ Los patrones empleados están explicados en [Arquitectura](docs/ARQUITECTURA.md)
 
 Instalados `@yewdiel21/motion-kit` **0.9.1** y GSAP **3.15.0**, fijados mediante `package-lock.json`. Integración basada en la skill y documentación incluidas en el paquete:
 
-- `Nav` dentro de `.mk-shell`: navegación original del kit, con sus siete estilos y barra de cristal en móvil.
+- `Nav` dentro de `.mk-shell`: Dock como único estilo de navegación, con la barra de cristal nativa del kit en móvil.
 - `Menu.Root/Trigger/Content/Item/Separator`: emergencia a comparar, escenarios, velocidad, planificador y opciones del escenario, con teclado y retorno del foco.
 - `Dialog.Root/Trigger/Content/Header/Title/Body/Footer/Close`: registro de emergencias, reinicio y apariencia, conservando formas y transiciones originales.
 - `Steps`, `Steps.Step` y `Steps.Counter`: registro en tres etapas, con validación, regreso y revisión antes de enviar a Python.
@@ -120,7 +120,7 @@ Instalados `@yewdiel21/motion-kit` **0.9.1** y GSAP **3.15.0**, fijados mediante
 - `FlipGroup`: actualización de la lista de emergencias.
 - `useCascade`: entrada de cabecera.
 - `useDetails`: bitácora y métricas, explicaciones de algoritmos, detalles de agentes y guía, plegados de inicio.
-- `ThemeProvider`, `ThemePicker` y `useTheme`: seis paletas seleccionables, modo claro/oscuro/sistema y persistencia.
+- `ThemeProvider`, `ThemePicker` y `useTheme`: OLED oscuro por defecto, seis paletas seleccionables, modo claro/oscuro/sistema y persistencia.
 - `useTabs` y `.mk-segmented`: herramientas del mapa y filtros, con indicador animado y navegación por teclado.
 - `.mk-button`, `.mk-field`, `.mk-switch`, `.mk-chip` y `.mk-glass`: controles y superficies nativos del kit.
 - GSAP `matchMedia`: dirección animada sobre rutas activas, con limpieza al desmontar.

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Dialog, Menu, Nav, Toaster, useCascade, useTheme } from '@yewdiel21/motion-kit/react';
-import type { NavStyle } from '@yewdiel21/motion-kit/react';
 import {
   Activity,
   ArrowDownToLine,
@@ -38,7 +37,6 @@ const headings = {
   agents: 'Unidades',
   guide: 'Guía del proyecto',
 };
-const navStyles: NavStyle[] = ['guapa', 'tasks', 'bonita', 'clasica', 'melon', 'dock', 'tunnel'];
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('operations');
@@ -48,17 +46,10 @@ export default function App() {
   const [formVersion, setFormVersion] = useState(0);
   const [position, setPosition] = useState<Point | null>(null);
   const [nextScenario, setNextScenario] = useState('urban');
-  const [navStyle, setNavStyle] = useState<NavStyle>(() => {
-    const stored = localStorage.getItem('ares-nav') as NavStyle;
-    return navStyles.includes(stored) ? stored : 'guapa';
-  });
   const theme = useTheme();
   const content = useRef<HTMLDivElement>(null);
   const simulation = useSimulation(selected, notify);
   const { state, comparison, error, setRunning, busy, load, perform } = simulation;
-  useEffect(() => {
-    localStorage.setItem('ares-nav', navStyle);
-  }, [navStyle]);
   useEffect(() => {
     document.documentElement.dataset.theme = theme.resolved;
   }, [theme.resolved]);
@@ -208,7 +199,7 @@ export default function App() {
         </main>
         <Nav
           aria-label="Navegación principal"
-          navStyle={navStyle}
+          navStyle="dock"
           accent
           items={pages}
           active={tab}
@@ -225,7 +216,7 @@ export default function App() {
               <span className="mk-nav__name">ARES</span>
             </button>
           }
-          actions={<AppearanceDialog navStyle={navStyle} onNavStyle={setNavStyle} />}
+          actions={<AppearanceDialog />}
         />
       </div>
       <Toaster labels={{ dismiss: 'Cerrar aviso' }} />

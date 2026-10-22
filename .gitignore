@@ -13,3 +13,4 @@ frontend/*.tsbuildinfo
 .vercel/
 .DS_Store
 .ruff_cache/
+docs
